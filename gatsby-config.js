@@ -13,7 +13,7 @@ module.exports = {
         basePath: '/',
         contentPath: 'code-notes',
         gitRepoContentPath:
-          'https://github.com/itsmohsenjalali/CodeNote/tree/master/notes/',
+          'https://github.com/itsmohsenjalali/mohsencodenote/tree/master/code-notes',
         showDescriptionInSidebar: true,
         showThemeInfo: false,
         logo: 'https://raw.githubusercontent.com/mrmartineau/gatsby-theme-code-notes/master/assets/logo.png',
