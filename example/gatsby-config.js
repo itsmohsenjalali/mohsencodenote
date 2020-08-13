@@ -1,28 +1,50 @@
 module.exports = {
   siteMetadata: {
-    title: 'Code notes',
-    description: 'A Gatsby theme for storing your code-related notes',
-    keywords: [],
+    title: 'CodeNotes',
+    description: `Hi Mohsen save your notes`,
+    author: 'Mohsen',
+    keywords: ["python", "codenote", "note", "mohsen jalali"]
+
   },
   plugins: [
     {
-      resolve: 'gatsby-theme-code-notes',
+      resolve: `gatsby-theme-code-notes`,
       options: {
-        contentPath: 'code-notes',
         basePath: '/',
+        contentPath: 'notes',
         gitRepoContentPath:
-          'https://github.com/mrmartineau/gatsby-theme-code-notes/tree/master/example/code-notes/',
+          'https://github.com/itsmohsenjalali/CodeNote/tree/master/notes/',
         showDescriptionInSidebar: true,
-        showThemeInfo: true,
-        logo:
-          'https://raw.githubusercontent.com/mrmartineau/gatsby-theme-code-notes/master/assets/logo.png',
+        showThemeInfo: false,
+        logo: 'https://raw.githubusercontent.com/mrmartineau/gatsby-theme-code-notes/master/assets/logo.png',
+
+        // Opensearch is used to enhance the search on your site.
+        // If you want to add it, ensure you set a `siteUrl`
         openSearch: {
-          siteShortName: `Gatsby Theme Code Notes Example`,
-          siteUrl: 'https://code-notes-example.netlify.app',
-          siteTags: 'front-end',
-          siteContact: 'https://twitter.com/MrMartineau',
-          siteDescription: 'A Gatsby theme for storing your code-related notes',
+          siteUrl: 'codenote.mohsenjalali.ir', // required if you want opensearch
+          siteShortName: 'Gatsby Theme Code Notes Example', // override the default value of 'Search`
+          siteTags: 'front-end', // optional
+          siteDescription: 'A Gatsby theme for storing your code-related notes', // optional
         },
+      },
+    },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `Mohsen Jalali`,
+        short_name: `CodeNote`,
+        start_url: `/`,
+        scope: ".",
+        display: "standalone",
+        background_color: `#663399`,
+        theme_color: `#333333`,
+        icon: `logo-site.png` // This path is relative to the root of the site.
+      }
+    },
+    {
+      resolve: `gatsby-plugin-offline`,
+      options: {
+        precachePages: [`/*`, `/tag/*`],
       },
     },
   ],
