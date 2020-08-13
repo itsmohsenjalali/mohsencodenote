@@ -11,7 +11,7 @@ module.exports = {
       resolve: `gatsby-theme-code-notes`,
       options: {
         basePath: '/',
-        contentPath: 'notes',
+        contentPath: 'code-notes',
         gitRepoContentPath:
           'https://github.com/itsmohsenjalali/CodeNote/tree/master/notes/',
         showDescriptionInSidebar: true,

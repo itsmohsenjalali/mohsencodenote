@@ -18,7 +18,9 @@
     "example"
   ],
   "dependencies": {
-    "eslint": "^7.3.1"
+    "eslint": "^7.3.1",
+    "gatsby-plugin-manifest": "^2.4.23",
+    "gatsby-plugin-offline": "^3.2.23"
   },
   "devDependencies": {
     "eslint": "^7.3.1",
