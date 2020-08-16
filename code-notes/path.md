@@ -67,6 +67,8 @@ print(paths)
 ```Output
 [PosixPath('gatsby/site/flow-typed'), PosixPath('gatsby/site/public'), PosixPath('gatsby/site/.git'), PosixPath('gatsby/site/node_modules'), PosixPath('gatsby/site/static'), PosixPath('gatsby/site/.cache'), PosixPath('gatsby/site/src')]
 ```
+If you want to search in the dir path use the below instruction
+
 - Note: iterdir() function doesn't get pattern but glob() function get function.
 ```python
 from pathlib import Path
@@ -95,4 +97,80 @@ print(" second method: ",py_files2)
 ```Output
 first method: [PosixPath('gatsby/site/node_modules/railroad-diagrams/railroad_diagrams.py')]
 second method: [PosixPath('gatsby/site/node_modules/railroad-diagrams/railroad_diagrams.py')]
+```
+
+We want to work with file in the dir path
+
+```python
+from pathlib import Path
+
+file_path = Path("test/123.py")
+if file_path.exists():
+    print("File Found")
+    file_path = file_path.rename("test/target.txt")
+    # file_path.unlink() --> delete file
+    print(file_path.stat())
+else:
+    print("File Not Found")
+
+```
+
+```Output
+File Found
+os.stat_result(st_mode=33204, st_ino=5384559, st_dev=2052, st_nlink=1, st_uid=1000, st_gid=1000, st_size=6, st_atime=1597476538, st_mtime=1597476538, st_ctime=1597476557)
+```
+- Note: "st_size" size of the file in byte, "st_atime" last time access to the file, "st_mtime" last time modified, "st_ctime" the time that file created.
+
+We use time with the below instruction because human-readable
+
+```python
+from pathlib import Path
+from time import ctime
+
+file_path = Path("test/123.py")
+if file_path.exists():
+    print("File Found")
+    print(ctime(file_path.stat().st_ctime))
+else:
+    print("File Not Found")
+
+```
+```Output
+Sat Aug 15 12:42:27 2020
+```
+We can use this library to read and write in the file instead of work with open function and this way is easier
+
+```python
+from pathlib import Path
+
+file_path = Path("test/123.py")
+if file_path.exists():
+    print("File Found")
+    print("Read text of the file: ", file_path.read_text())
+    print("Read byte of the file: ", file_path.read_bytes())
+    file_path.write_text("mohsen jalali")
+    print("Read text of the file: ", file_path.read_text())
+    print("Read byte of the file: ", file_path.read_bytes())
+else:
+    print("File Not Found")
+
+```
+```Output
+Read text of the file:  salam
+
+Read byte of the file:  b'salam\n'
+Read text of the file:  mohsen jalali
+Read byte of the file:  b'mohsen jalali'
+```
+If we want to copy file the best way to use shutil module
+
+```python
+from pathlib import Path
+import shutil
+file_path = Path("test/123.py")
+target_path = Path("test/target.txt")
+if file_path.exists():
+    shutil.copy(file_path, target_path)
+else:
+    print("File Not Found")
 ```
