@@ -18,7 +18,7 @@ Beside package directory create test and data directories and README.md and LICE
 
 - You can see all license in: https://choosealicense.com
 
-![](../assets/package1.png)
+![](../../assets/package1.png)
 
 ### Step 3
 In setup.py you should write this code
@@ -43,7 +43,7 @@ Build source and build distributions with the below command
 python setud.py sdist bdist_wheel
 ```
 
-![](../assets/package2.png)
+![](../../assets/package2.png)
 
 ### Finall step
 Upload the dist directory files and folders to the pypi.org with below command
