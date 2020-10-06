@@ -71,3 +71,73 @@ public class History {
     }
 }
 ```
+
+memento design pattern in python 
+
+Editor.py
+```Python
+from .EditorState import Editor_state
+class Editor():
+    def __init__(self,content=""):
+        self.__content = content
+    @property
+    def content(self):
+        return self.__content
+    @content.setter
+    def content(self,content):
+        self.__content = content
+    def create_state(self):
+        return Editor_state(self.__content)
+    def restore(self,state):
+        self.__content = state.content
+```
+
+EditorState.py
+
+```Python
+class Editor_state():
+    def __init__(self,content):
+        self.__CONTENT = content
+    @property
+    def content(self):
+        return self.__CONTENT
+```
+History.py
+
+```Python
+class History():
+    def __init__(self):
+        self.__states = []
+    def push(self,state):
+        self.__states.append(state)
+    def pop(self):
+        last_index = len(self.__states) - 1
+        last_state = self.__states.pop(last_index)
+        return last_state
+```
+
+check package in main file
+
+main.py
+
+```Python
+from memento.History import History
+from memento.Editor import Editor
+
+def main():
+     editor = Editor()
+     history = History()
+     editor.content="a"
+     history.push(editor.create_state())
+     editor.content="b"
+     history.push(editor.create_state())
+     editor.content="c"
+     editor.restore(history.pop())
+     print(editor.content)
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    main()
+
+```
