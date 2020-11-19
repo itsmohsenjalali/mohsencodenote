@@ -8,7 +8,7 @@ emoji: 📏
 We want to implement undo feature with memento design pattern.
 
 We want three classes that communication between them displayed in the below UML .
-![](../../assets/memento.png)
+![](images/memento.png)
 
 In this problem Memento class is EditorState and Originator class is Editor and CareTaker class is History.
 

@@ -9,7 +9,7 @@ emoji: 📏
 when we want to implement some features in our software like Brush or Selection in Photoshop, we use this pattern and this pattern make our project extendable.
 
 UML of this pattern:
-![](../../assets/state.png)
+![](images/state.png)
 
 Tool interface:
 ```Java
