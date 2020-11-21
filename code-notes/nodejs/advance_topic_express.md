@@ -80,6 +80,10 @@ export DEBUG=app:test
 or
 export DEBUG=
 ```
+if you run faster you can use below command
+```Terminal
+DEBUG=app:test nodemon app.js
+```
 ## Templating Engines
 Template is not use full now because a lot's of application use rest-ful api.
 The package that we use for template engine is pug.
