@@ -1,12 +1,14 @@
 ---
-title : Introducing MongoDB
+title: Mongodb with Node
 tags:
   - NodeJS
   - MongoDB
 emoji: 🌿
 link: https://docs.mongodb.com/manual/
 ---
+
 ## Connect to database
+
 ```JS
 const mongoose = require('mongoose')
 
@@ -15,7 +17,9 @@ mongoose.connect('mongodb://localhost:27017/playgrounds', { useNewUrlParser: tru
     .catch(err => console.log("Not connect to mongo database", err))
 
 ```
+
 ## Create Schema
+
 A document schema is a JSON object that allows you to define the shape and content of documents and embedded documents in a collection. You can use a schema to require a specific set of fields, configure the content of a field, or to validate changes to a document based on its beginning and ending states.
 
 ```JS
@@ -27,7 +31,9 @@ const schema = new mongoose.Schema({
     isPublished: Boolean
 })
 ```
+
 ### List of type in schema
+
 - String
 - Number
 - Date
@@ -37,6 +43,7 @@ const schema = new mongoose.Schema({
 - Array
 
 ## Create Models in mongo
+
 ```JS
 const Course = mongoose.model('Course', schema);
 const course = new Course({
@@ -46,7 +53,9 @@ const course = new Course({
     isPublished: true
 });
 ```
+
 If we want to save data in database and after print it in console we should change code like below
+
 ```JS
 async function createMongo(params) {
     const Course = mongoose.model('Course', schema);
@@ -62,6 +71,7 @@ async function createMongo(params) {
 
 }
 ```
+
 ```Output
 [
   {
@@ -75,7 +85,9 @@ async function createMongo(params) {
   }
 ]
 ```
+
 ## How to run Query?
+
 ```JS
 async function getCourses(params) {
     const courses = await Course
@@ -87,6 +99,7 @@ async function getCourses(params) {
     console.log(courses)
 }
 ```
+
 ```Output
 [
   {
@@ -96,8 +109,11 @@ async function getCourses(params) {
   }
 ]
 ```
+
 ## Comparison Operators
+
 We can use comparison operators like below
+
 - eq(equal)
 - ne(not equal)
 - gt(greater than)
@@ -112,7 +128,9 @@ const courses = await Course
     .find({price: { $gt: 10 , $lt:20 }})
     //.find({price: { $in: [10,20,30]}})
 ```
+
 ## Logical Operators
+
 - OR
 - AND
 
@@ -127,9 +145,11 @@ const courses = await Course
 const courses = await Course
         .find()
         .or([{author: 'Mohsen'},{isPublish:true}])
-               
+
 ```
+
 ## Regular Expressions
+
 ```JS
 //Start with Mohsen
 const courses = await Course
@@ -142,7 +162,9 @@ const courses = await Course
         .find({ author: /.*Mohsen.*/i })
 //i for case sensitive
 ```
+
 ## Count function
+
 ```JS
 async function countOfCourses(params) {
     const courses = await Course
@@ -153,8 +175,11 @@ async function countOfCourses(params) {
     console.log(courses)
 }
 ```
+
 ## Pagination
+
 We can implement pagination with skip function
+
 ```JS
 async function getCourses(params) {
     const pageNumber = 2
@@ -166,15 +191,22 @@ async function getCourses(params) {
     console.log(courses)
 }
 ```
+
 ## Import Data
+
 We can import json file to mongodb with below command
+
 ```Terminal
 mongoimport --db DATABASE_NAME --collection COLLECTION_NAME --file JSON_FILE --jsonArray
-``` 
+```
+
 ## Update
+
 We have two approchs:
+
 - First:
   When we get data from clients or we want to implement the rule of our application like if isPublished is true object can not get updated. in this case we should use first approch.
+
 ```JS
 async function updateCourse(id) {
     const course = await Course.findById(id);
@@ -192,6 +224,7 @@ async function updateCourse(id) {
 }
 updateCourse("5fba42887ec73695e5003291")
 ```
+
 ```Output
 {
   tags: [ 'node', 'back' ],
@@ -203,13 +236,15 @@ updateCourse("5fba42887ec73695e5003291")
   __v: 0
 }
 ```
+
 - Second:
   When we want update a lots of documents that store in database in one query we should use this approch.
   we use update function first argument is filter and second argument is update data.
+
 ```JS
 async function updateCourse_approch2(id) {
     // First approch
-    const result = await Course.update({ _id: id }, 
+    const result = await Course.update({ _id: id },
     // this function return result of update
     {
         $set: {
@@ -219,8 +254,8 @@ async function updateCourse_approch2(id) {
     });
     console.log(result)
     // Second approch
-    const course = await Course.findByIdAndUpdate(id, 
-    // this function return course 
+    const course = await Course.findByIdAndUpdate(id,
+    // this function return course
     {
         $set: {
             name: "asal",
@@ -230,10 +265,13 @@ async function updateCourse_approch2(id) {
     console.log(course)
 }
 ```
+
 ### Note
-$set is update operators you can see all operators in this [link](https://docs.mongodb.com/manual/reference/operator/update/)
+
+\$set is update operators you can see all operators in this [link](https://docs.mongodb.com/manual/reference/operator/update/)
 
 ## Delete
+
 ```JS
 async function deleteCourses(id) {
     const result = await Course.deleteOne({ _id: id }) //return result
