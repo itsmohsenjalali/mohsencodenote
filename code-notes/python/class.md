@@ -20,7 +20,8 @@ print(t1.x, t1.y)
 ```Output
 10 20
 ```
-Instance attribute or class attribute
+Instance attribute or class attribute.
+Note: For calling class attributes we should call throughout class name.
 
 ```python
 class test:
@@ -28,6 +29,7 @@ class test:
 
     def __init__(self):
         self.x = 10 # Instance attribute
+        test.default_color= 'yellow'
 ```
 
 class methods are methods that related to the class
@@ -51,7 +53,29 @@ point = test.zero()
 point.draw()
 
 ```
-Dunder or magic methods in Python are the methods having two prefix and suffix underscores in the method name. For more detail:
+There is a another type of method which is related to the class and it is static method 
+```python
+class test:
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    @staticmethod
+    def isPositive(x):
+        return x > 0
+```
+# Difference between Static Method and Class Method
+- A class method takes cls as the first parameter while a static method needs no specific parameters.
+- A class method can access or modify the class state while a static method can’t access or modify it.
+- In general, static methods know nothing about the class state. They are utility-type methods that take some parameters and work upon those parameters. On the other hand class methods must have class as a parameter.
+- We use @classmethod decorator in python to create a class method and we use @staticmethod decorator to create a static method in python.
+- We generally use the class method to create factory methods. Factory methods return class objects ( similar to a constructor ) for different use cases.
+- We generally use static methods to create utility functions.
+
+## Note: It is important to call static method through a object with self not through a class name. When we use object for calling static our code become more flexible in inheritance.
+
+Dunder or magic methods in Python are the methods having two prefix and suffix underscores in the method name and are called dunder Function Name. For more detail:
 - https://rszalski.github.io/magicmethods/
 
 ```python
@@ -184,6 +208,7 @@ class TagCloud:
 
     def __init__(self, tag):
         self.__tags = tag
+        # self.tags = tag --> self-encapsulation
 
     @property
     def tags(self):
@@ -205,6 +230,8 @@ print(cloud.tags)
 C++
 python1
 ```
+## Note: We can use encapsulation in python (@property) to calculate some value on the fly, for example we store temperature celsius but in some situation need temperature in fahrenheit so we calculate from celsius and return.
+
 Inheritance in python
 - Note: don't use more than 2 levels inheritance because decrease your code compatibility.  
 Call parent class in constructor
@@ -247,4 +274,42 @@ D.eat()
 ```Output
 Fish Eat
 Animal Eat
+```
+
+## Note: In inheritance we should use delegate function for Properties and then in overriding we should override that function.
+
+```python
+class TagCloud:
+
+    def __init__(self, tag):
+        self.__tags = tag
+        # self.tags = tag --> self-encapsulation
+
+    @property
+    def tags(self):
+        self._tags_name()
+    
+    def _tags_get(self):
+        return self.__tags
+
+    @tags.setter
+    def tags(self, tag):
+        self._tags_set(tag)
+    
+    def _tags_set(self, tag):
+        if tag == "python":
+            raise ValueError("Bad value " + tag)
+        self.__tags = tag
+
+class emoji(TagCloud):
+    def __init__(self):
+        pass
+    
+    def _tags_get(self):
+        return super()._tags_get() + ' emoji'
+    
+    def _tags_set(self, tag):
+        if tag == "emoji":
+            raise ValueError("Bad value " + tag)
+        super()._tags_set(tag)
 ```
