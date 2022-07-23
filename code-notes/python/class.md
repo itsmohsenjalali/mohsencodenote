@@ -313,3 +313,30 @@ class emoji(TagCloud):
             raise ValueError("Bad value " + tag)
         super()._tags_set(tag)
 ```
+
+# Dunder repr function(__repr__) 
+Is a special method used to represent a class's objects as a string. __repr__ is called by the repr() built-in function.
+This function shows string value for each object and it uses for developer.
+
+```python
+class Tag:
+    def __init__(self, tag: str):
+        self.tag = tag
+    
+    def __repr__(self):
+        return f"tag : {self.tag}"
+
+t1 = Tag(tag= "python")
+print(t1)
+repr(t1)
+```
+```Output
+tag : python
+'tag: python'
+```
+
+# Dunder str function(__str__)
+This function is like __repr__, but it is used for external customers and represent data for them.
+
+# Dunder format function(__format__)
+This function is like dunder str, but it is used for represent in format string, and most of the time it is useful when we want to represent float number in string and we want to customise decimal places.
