@@ -305,6 +305,12 @@ This is C3 algorithm:
 
 In this link C3 is explained [link](https://www.youtube.com/watch?v=IqwWxZrMcx4)
 
+C3 ensures that:
+- Subclasses come before base classes
+- Base class order from class definition is preserved
+- The first two qualities are preserved for all MROs in a program
+
+because of above tips C3 does not allow some inheritance declarations happend in Python
 ```python
 class A:
     pass
@@ -393,3 +399,123 @@ This function is like __repr__, but it is used for external customers and repres
 
 # Dunder format function(__format__)
 This function is like dunder str, but it is used for represent in format string, and most of the time it is useful when we want to represent float number in string and we want to customise decimal places.
+
+# super() function
+The super() function is used to give access to methods and properties of parents. The super function given MRO and a class C in that MRO. super() gives you an object which resolves methods using only the part of MRO which comes after C.
+
+super() works with MRO of an object or class, not just its base classes.
+
+super() gives you a proxy object which has access to the entire inheritance graph of the object.
+
+```python
+class a:
+    def __init__(self, **kwargs):
+        print('a')
+class h:
+    def __init__(self, **kwargs):
+        print('h')
+class m:
+    pass
+class f(m):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        print('f')
+class b(a, h):
+    def __init__(self, age, **kwargs):
+        s = super()
+        print(s)
+        s.__init__(**kwargs)
+        self.m = age
+
+class d(b, f):
+    def __init__(self, age, **kwargs):
+        s = super()
+        print(s)
+        print(s.__init__)
+        s.__init__(age ,**kwargs)
+
+
+t = d(age=10, body=30)
+print(d.__mro__)
+```
+
+```Output
+<super: <class 'd'>, <d object>>
+<bound method b.__init__ of <__main__.d object at 0x100f03d90>>
+<super: <class 'b'>, <d object>>
+<bound method a.__init__ of <__main__.d object at 0x100f03d90>>
+a
+(<class '__main__.d'>, <class '__main__.b'>, <class '__main__.a'>, <class '__main__.h'>, <class '__main__.f'>, <class '__main__.m'>, <class 'object'>)
+```
+
+# Explicit arguments to super()
+super(class-object, instance-or-class)
+
+# Complete Example Of MRO and Super Function
+
+```python
+class SimpleList:
+    def __init__(self, items):
+        self._list = list(items)
+
+    def add(self, item):
+        self._list.append(item)
+
+    def sort(self):
+        self._list.sort()
+
+    def __repr__(self):
+        return str(self._list)
+
+
+class SortedList(SimpleList):
+    def __init__(self, item=()):
+        super().__init__(item)
+        self.sort()
+
+    def add(self, item):
+        super().add(item)
+        self.sort()
+
+
+class IntList(SimpleList):
+    def __init__(self, items=()):
+        for x in items: self._validate(x)
+        super().__init__(items)
+
+    @staticmethod
+    def _validate(x):
+        if not isinstance(x, int):
+            raise TypeError("Only support Int value")
+
+    def add(self, item):
+        self._validate(item)
+        super().add(item)
+
+
+class SortedIntList(SortedList, IntList):
+    pass
+
+
+s = SortedIntList([10,9,40,-25])
+print(s)
+s.add(23)
+print(s)
+s.add("S")
+print(s)
+```
+
+```Output
+[-25, 9, 10, 40]
+[-25, 9, 10, 23, 40]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/Users/blue-day/Desktop/test_/main.py", line 21, in add
+    super().add(item)
+  File "/Users/blue-day/Desktop/test_/main.py", line 36, in add
+    self._validate(item)
+  File "/Users/blue-day/Desktop/test_/main.py", line 33, in _validate
+    raise TypeError("Only support Int value")
+TypeError: Only support Int value
+[-25, 9, 10, 23, 40]
+```
