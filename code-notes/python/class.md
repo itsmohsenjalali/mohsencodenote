@@ -232,7 +232,7 @@ python1
 ```
 ## Note: We can use encapsulation in python (@property) to calculate some value on the fly, for example we store temperature celsius but in some situation need temperature in fahrenheit so we calculate from celsius and return.
 
-Inheritance in python
+# Inheritance in python
 - Note: don't use more than 2 levels inheritance because decrease your code compatibility.  
 Call parent class in constructor
 
@@ -275,7 +275,60 @@ D.eat()
 Fish Eat
 Animal Eat
 ```
+## What is Method Resolution Order (MRO)?
+MRO is a concept used in inheritance. It is the order in which a method is searched for in a classes hierarchy and is especially useful in Python because Python supports multiple inheritance.
 
+```python
+class A:
+    pass
+
+class B:
+    pass
+
+class C(B,A):
+    pass
+
+print(C.__mro__)
+```
+```Output
+(<class '__main__.C'>, <class '__main__.B'>, <class '__main__.A'>, <class 'object'>)
+```
+### How is MRO used?
+- python finds the MRO for type of the object on which a method is invoked
+- python checks each class in MRO in order to find one that implements the method
+- the first implementation found is used
+
+### How is MRO calculated ?
+Python uses C3 algorithm for calculating the order of classes and this causes some limitations for implementing multiple inheritance.
+This is C3 algorithm:
+![](./images/C3.png)
+
+In this link C3 is explained [link](https://www.youtube.com/watch?v=IqwWxZrMcx4)
+
+```python
+class A:
+    pass
+
+
+class B(A):
+    pass
+
+
+class C(A, B):
+    pass
+
+
+print(C.__mro__)
+```
+```Output
+Traceback (most recent call last):
+  File "/Users/blue-day/Desktop/test_/main.py", line 34, in <module>
+    class C(A, B):
+TypeError: Cannot create a consistent method resolution
+order (MRO) for bases A, B
+```
+
+The above example has problem and we can fix it with C3 algorithm.
 ## Note: In inheritance we should use delegate function for Properties and then in overriding we should override that function.
 
 ```python
