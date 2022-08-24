@@ -7,9 +7,9 @@ emoji: 🐍
 # What is decorator?
 There are two types of decorator function decorator and class decorator the below digrams show how they work.
 
-![](/code-notes/python/images/decorator-1.png)
+![](/code-notes/python/images/decorator1.png)
 
-![](/code-notes/python/images/decorator-2.png)
+![](/code-notes/python/images/decorator2.png)
 
 # This is the example of function decorator:
 
