@@ -3,6 +3,7 @@ title : Metaclasses In Python
 tags:
   - python
 emoji: 🐍
+link: https://realpython.com/python-metaclasses/
 ---
 
 # What is Metaclass?
