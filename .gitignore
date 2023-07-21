@@ -4,3 +4,4 @@ node_modules
 /mtc-vectors.txt
 .env
 .vscode
+.DS_Store

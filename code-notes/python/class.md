@@ -20,7 +20,8 @@ print(t1.x, t1.y)
 ```Output
 10 20
 ```
-Instance attribute or class attribute
+Instance attribute or class attribute.
+Note: For calling class attributes we should call throughout class name.
 
 ```python
 class test:
@@ -28,6 +29,7 @@ class test:
 
     def __init__(self):
         self.x = 10 # Instance attribute
+        test.default_color= 'yellow'
 ```
 
 class methods are methods that related to the class
@@ -51,7 +53,29 @@ point = test.zero()
 point.draw()
 
 ```
-Dunder or magic methods in Python are the methods having two prefix and suffix underscores in the method name. For more detail:
+There is a another type of method which is related to the class and it is static method 
+```python
+class test:
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    @staticmethod
+    def isPositive(x):
+        return x > 0
+```
+# Difference between Static Method and Class Method
+- A class method takes cls as the first parameter while a static method needs no specific parameters.
+- A class method can access or modify the class state while a static method can’t access or modify it.
+- In general, static methods know nothing about the class state. They are utility-type methods that take some parameters and work upon those parameters. On the other hand class methods must have class as a parameter.
+- We use @classmethod decorator in python to create a class method and we use @staticmethod decorator to create a static method in python.
+- We generally use the class method to create factory methods. Factory methods return class objects ( similar to a constructor ) for different use cases.
+- We generally use static methods to create utility functions.
+
+## Note: It is important to call static method through a object with self not through a class name. When we use object for calling static our code become more flexible in inheritance.
+
+Dunder or magic methods in Python are the methods having two prefix and suffix underscores in the method name and are called dunder Function Name. For more detail:
 - https://rszalski.github.io/magicmethods/
 
 ```python
@@ -184,6 +208,7 @@ class TagCloud:
 
     def __init__(self, tag):
         self.__tags = tag
+        # self.tags = tag --> self-encapsulation
 
     @property
     def tags(self):
@@ -205,7 +230,9 @@ print(cloud.tags)
 C++
 python1
 ```
-Inheritance in python
+## Note: We can use encapsulation in python (@property) to calculate some value on the fly, for example we store temperature celsius but in some situation need temperature in fahrenheit so we calculate from celsius and return.
+
+# Inheritance in python
 - Note: don't use more than 2 levels inheritance because decrease your code compatibility.  
 Call parent class in constructor
 
@@ -247,4 +274,248 @@ D.eat()
 ```Output
 Fish Eat
 Animal Eat
+```
+## What is Method Resolution Order (MRO)?
+MRO is a concept used in inheritance. It is the order in which a method is searched for in a classes hierarchy and is especially useful in Python because Python supports multiple inheritance.
+
+```python
+class A:
+    pass
+
+class B:
+    pass
+
+class C(B,A):
+    pass
+
+print(C.__mro__)
+```
+```Output
+(<class '__main__.C'>, <class '__main__.B'>, <class '__main__.A'>, <class 'object'>)
+```
+### How is MRO used?
+- python finds the MRO for type of the object on which a method is invoked
+- python checks each class in MRO in order to find one that implements the method
+- the first implementation found is used
+
+### How is MRO calculated ?
+Python uses C3 algorithm for calculating the order of classes and this causes some limitations for implementing multiple inheritance.
+This is C3 algorithm:
+![](./images/C3.png)
+
+In this link C3 is explained [link](https://www.youtube.com/watch?v=IqwWxZrMcx4)
+
+C3 ensures that:
+- Subclasses come before base classes
+- Base class order from class definition is preserved
+- The first two qualities are preserved for all MROs in a program
+
+because of above tips C3 does not allow some inheritance declarations happend in Python
+```python
+class A:
+    pass
+
+
+class B(A):
+    pass
+
+
+class C(A, B):
+    pass
+
+
+print(C.__mro__)
+```
+```Output
+Traceback (most recent call last):
+  File "/Users/blue-day/Desktop/test_/main.py", line 34, in <module>
+    class C(A, B):
+TypeError: Cannot create a consistent method resolution
+order (MRO) for bases A, B
+```
+
+The above example has problem and we can fix it with C3 algorithm.
+## Note: In inheritance we should use delegate function for Properties and then in overriding we should override that function.
+
+```python
+class TagCloud:
+
+    def __init__(self, tag):
+        self.__tags = tag
+        # self.tags = tag --> self-encapsulation
+
+    @property
+    def tags(self):
+        self._tags_name()
+    
+    def _tags_get(self):
+        return self.__tags
+
+    @tags.setter
+    def tags(self, tag):
+        self._tags_set(tag)
+    
+    def _tags_set(self, tag):
+        if tag == "python":
+            raise ValueError("Bad value " + tag)
+        self.__tags = tag
+
+class emoji(TagCloud):
+    def __init__(self):
+        pass
+    
+    def _tags_get(self):
+        return super()._tags_get() + ' emoji'
+    
+    def _tags_set(self, tag):
+        if tag == "emoji":
+            raise ValueError("Bad value " + tag)
+        super()._tags_set(tag)
+```
+
+# Dunder repr function(__repr__) 
+Is a special method used to represent a class's objects as a string. __repr__ is called by the repr() built-in function.
+This function shows string value for each object and it uses for developer.
+
+```python
+class Tag:
+    def __init__(self, tag: str):
+        self.tag = tag
+    
+    def __repr__(self):
+        return f"tag : {self.tag}"
+
+t1 = Tag(tag= "python")
+print(t1)
+repr(t1)
+```
+```Output
+tag : python
+'tag: python'
+```
+
+# Dunder str function(__str__)
+This function is like __repr__, but it is used for external customers and represent data for them.
+
+# Dunder format function(__format__)
+This function is like dunder str, but it is used for represent in format string, and most of the time it is useful when we want to represent float number in string and we want to customise decimal places.
+
+# super() function
+The super() function is used to give access to methods and properties of parents. The super function given MRO and a class C in that MRO. super() gives you an object which resolves methods using only the part of MRO which comes after C.
+
+super() works with MRO of an object or class, not just its base classes.
+
+super() gives you a proxy object which has access to the entire inheritance graph of the object.
+
+```python
+class a:
+    def __init__(self, **kwargs):
+        print('a')
+class h:
+    def __init__(self, **kwargs):
+        print('h')
+class m:
+    pass
+class f(m):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        print('f')
+class b(a, h):
+    def __init__(self, age, **kwargs):
+        s = super()
+        print(s)
+        s.__init__(**kwargs)
+        self.m = age
+
+class d(b, f):
+    def __init__(self, age, **kwargs):
+        s = super()
+        print(s)
+        print(s.__init__)
+        s.__init__(age ,**kwargs)
+
+
+t = d(age=10, body=30)
+print(d.__mro__)
+```
+
+```Output
+<super: <class 'd'>, <d object>>
+<bound method b.__init__ of <__main__.d object at 0x100f03d90>>
+<super: <class 'b'>, <d object>>
+<bound method a.__init__ of <__main__.d object at 0x100f03d90>>
+a
+(<class '__main__.d'>, <class '__main__.b'>, <class '__main__.a'>, <class '__main__.h'>, <class '__main__.f'>, <class '__main__.m'>, <class 'object'>)
+```
+
+# Explicit arguments to super()
+super(class-object, instance-or-class)
+
+# Complete Example Of MRO and Super Function
+
+```python
+class SimpleList:
+    def __init__(self, items):
+        self._list = list(items)
+
+    def add(self, item):
+        self._list.append(item)
+
+    def sort(self):
+        self._list.sort()
+
+    def __repr__(self):
+        return str(self._list)
+
+
+class SortedList(SimpleList):
+    def __init__(self, item=()):
+        super().__init__(item)
+        self.sort()
+
+    def add(self, item):
+        super().add(item)
+        self.sort()
+
+
+class IntList(SimpleList):
+    def __init__(self, items=()):
+        for x in items: self._validate(x)
+        super().__init__(items)
+
+    @staticmethod
+    def _validate(x):
+        if not isinstance(x, int):
+            raise TypeError("Only support Int value")
+
+    def add(self, item):
+        self._validate(item)
+        super().add(item)
+
+
+class SortedIntList(SortedList, IntList):
+    pass
+
+
+s = SortedIntList([10,9,40,-25])
+print(s)
+s.add(23)
+print(s)
+s.add("S")
+print(s)
+```
+
+```Output
+[-25, 9, 10, 40]
+[-25, 9, 10, 23, 40]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/Users/blue-day/Desktop/test_/main.py", line 21, in add
+    super().add(item)
+  File "/Users/blue-day/Desktop/test_/main.py", line 36, in add
+    self._validate(item)
+  File "/Users/blue-day/Desktop/test_/main.py", line 33, in _validate
+    raise TypeError("Only support Int value")
+TypeError: Only support Int value
+[-25, 9, 10, 23, 40]
 ```

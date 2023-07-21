@@ -21,4 +21,4 @@ We can get a summary of data with describe() method and call values array that d
 df.describe()
 df.values
 ```
-![](../../assets/Jupyter1.png)
+![](image/Jupyter1.png)
