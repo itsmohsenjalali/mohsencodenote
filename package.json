@@ -21,7 +21,7 @@
     "gatsby-plugin-offline": "^3.2.22",
     "gatsby-source-filesystem": "^2.3.24",
     "gatsby-theme-code-notes": "^1.15.1",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-dom": "^16.13.1"
   },
   "repository": {
