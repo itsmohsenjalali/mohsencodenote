@@ -16,12 +16,12 @@
     "start": "gatsby serve"
   },
   "dependencies": {
-    "gatsby": "^2.23.18",
+    "gatsby": "^2.32.13",
     "gatsby-plugin-manifest": "^2.6.1",
-    "gatsby-plugin-offline": "^3.2.22",
-    "gatsby-source-filesystem": "^2.3.24",
+    "gatsby-plugin-offline": "^3.10.02",
+    "gatsby-source-filesystem": "^2.11.1",
     "gatsby-theme-code-notes": "^1.15.1",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-dom": "^16.13.1"
   },
   "repository": {
